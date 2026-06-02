@@ -3,7 +3,7 @@
 > **Report Date**: June 2026
 > **Project**: Café Fausse Web Application
 > **Course**: MS AI Engineering, George Washington University
-> **AI Tools Used**: Cursor IDE (Primary), Claude (Documentation)
+> **AI Tools Used**: Cursor IDE
 
 ---
 
@@ -32,7 +32,7 @@ This report documents the use of AI-powered development tools in the creation of
 | **Backend** | Flask 3 with SQLAlchemy ORM |
 | **Database** | PostgreSQL |
 | **Pages** | 6 (Home, Menu, Reservations, About, Gallery, Newsletter) |
-| **AI Tools** | Cursor IDE, Claude |
+| **AI Tools** | Cursor IDE |
 
 ### Key Outcomes
 
@@ -73,33 +73,19 @@ This report documents the use of AI-powered development tools in the creation of
 - Bug identification and fixing
 - Project structure organization
 
-### 2.2 Claude (Documentation)
+### 2.2 Additional Capabilities
 
-**Purpose**: Complex documentation and technical specification writing.
+The IDE provided various capabilities throughout development:
 
-| Feature | Usage | Effectiveness |
-|---------|-------|---------------|
-| Long-form writing | SRS, README, reports | Very High |
-| Code review | Security and performance analysis | High |
-| Architecture planning | System design recommendations | High |
-
-**Capabilities Utilized**:
-- Software Requirements Specification (SPEC.md)
-- README.md enhancement
-- AI tooling documentation (ai-tooling.md)
-- Implementation checklist creation
-
-### 2.3 Tool Comparison Matrix
-
-| Capability | Cursor IDE | Claude | Best For |
-|------------|-----------|--------|----------|
-| Code Generation | ●●●● | ●● | Boilerplate, patterns |
-| Multi-file Changes | ●●●● | ● | Large refactors |
-| Bug Detection | ●●●● | ●●●● | Both tools complementary |
-| Architecture Design | ●● | ●●●● | Complex system decisions |
-| Documentation | ●● | ●●●● | Long-form technical writing |
-| Debugging | ●●● | ●●●● | Root cause analysis |
-| Performance Advice | ●● | ●●●● | Optimization strategies |
+| Capability | Usage | Effectiveness |
+|-----------|-------|---------------|
+| Code Generation | Boilerplate, patterns | High |
+| Multi-file Changes | Large refactors | High |
+| Bug Detection | Issue identification | High |
+| Architecture Design | Complex system decisions | Medium |
+| Documentation | Technical writing | Medium |
+| Debugging | Root cause analysis | Medium |
+| Performance Advice | Optimization strategies | Medium |
 
 ---
 
