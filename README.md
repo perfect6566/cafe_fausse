@@ -6,6 +6,38 @@ A full-stack web application for Café Fausse, a fine-dining restaurant in Washi
 
 ---
 
+## Project Overview
+
+This web application was developed to provide Café Fausse with an elegant online presence and a functional table reservation system. The project includes six fully responsive pages, a newsletter subscription system, and a backend API with PostgreSQL database integration.
+
+### Key Requirements Addressed
+
+| Requirement | Implementation |
+|-------------|----------------|
+| 5+ Web Pages | 6 pages built with React and JSX |
+| Contact Information | Address, phone, hours on Home and Footer |
+| Menu Display | Categorized menu with pricing |
+| About Us Page | Restaurant history and owner information |
+| Newsletter Signup | Form with email validation, stored in database |
+| Photo Gallery | Lightbox with keyboard navigation |
+| Reservation System | 30 tables, 30-min slots, random table assignment |
+| Awards/Reviews | Featured on Home page |
+| Flexbox/Grid CSS | CSS implementation uses Flexbox and Grid layouts |
+
+---
+
+## Tech Stack
+
+| Layer | Technology | Version |
+|-------|------------|---------|
+| Frontend | React | 18 |
+| Frontend Build | Vite | Latest |
+| Backend | Flask | 3 |
+| Database | PostgreSQL | 14+ |
+| ORM | SQLAlchemy | Latest |
+
+---
+
 ## Quick Start
 
 ### Prerequisites
@@ -27,11 +59,7 @@ psql -U postgres -c "CREATE DATABASE cafe_fausse;"
 
 **macOS / Linux (Terminal):**
 ```bash
-# Create database
 psql -U postgres -c "CREATE DATABASE cafe_fausse;"
-
-# Or using createdb
-createdb cafe_fausse
 ```
 
 ---
@@ -62,14 +90,12 @@ python init_db.py
 python app.py
 ```
 
-**macOS (Terminal):**
+**macOS / Linux (Terminal):**
 ```bash
 cd backend
 
 # Create virtual environment
 python3 -m venv venv
-
-# Activate
 source venv/bin/activate
 
 # Install dependencies
@@ -84,55 +110,12 @@ python init_db.py
 
 # Start server
 python app.py
-```
-
-**Linux (Ubuntu/Debian):**
-```bash
-cd backend
-
-# Install system dependencies (if needed)
-sudo apt install python3-venv libpq-dev
-
-# Create virtual environment
-python3 -m venv venv
-
-# Activate
-source venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Create .env file
-echo 'DATABASE_URL=postgresql://postgres:@localhost:5432/cafe_fausse' > .env
-echo 'FLASK_PORT=5000' >> .env
-
-# Initialize database
-python init_db.py
-
-# Start server
-python app.py
-```
-
-**Linux (Fedora/RHEL):**
-```bash
-cd backend
-
-# Install system dependencies
-sudo dnf install python3 python3-pip postgresql-libs
-
-# Create virtual environment
-python3 -m venv venv
-source venv/bin/activate
-
-pip install -r requirements.txt
-# ... rest same as above
 ```
 
 ---
 
 ### Step 3: Frontend Setup
 
-**All Platforms:**
 ```bash
 cd frontend
 npm install
@@ -152,19 +135,29 @@ npm run dev
 ## Project Structure
 
 ```
-cafe/
-├── backend/           # Flask API
-│   ├── app.py        # API endpoints
-│   ├── models.py     # Database models
-│   ├── init_db.py    # Database setup
-│   └── requirements.txt
+cafe_fausse/
+├── backend/                    # Flask API
+│   ├── app.py                 # API endpoints
+│   ├── models.py              # SQLAlchemy models
+│   ├── database.py            # Database initialization
+│   ├── config.py              # Configuration
+│   ├── init_db.py             # Database setup script
+│   ├── requirements.txt        # Python dependencies
+│   └── .env                   # Environment variables (local)
 │
-└── frontend/          # React app
-    ├── src/
-    │   ├── pages/    # 6 pages: Home, Menu, Reservations, About, Gallery, Newsletter
-    │   ├── components/ # Navbar, Footer, DateTimePicker, Gallery
-    │   └── data/      # Menu & restaurant data
-    └── package.json
+├── frontend/                   # React application
+│   ├── src/
+│   │   ├── pages/            # 6 pages: Home, Menu, Reservations, About, Gallery, Newsletter
+│   │   ├── components/       # Navbar, Footer, DateTimePicker, Gallery
+│   │   ├── data/            # Menu & restaurant data
+│   │   └── App.jsx          # Main app component
+│   ├── index.html
+│   └── package.json
+│
+├── SPEC.md                    # Software Requirements Specification
+├── ai-tooling.md              # AI tooling documentation
+├── staging.md                 # Staging deployment information
+└── README.md
 ```
 
 ---
@@ -174,10 +167,36 @@ cafe/
 | Feature | Description |
 |---------|-------------|
 | **6 Pages** | Home, Menu, Reservations, About, Gallery, Newsletter |
-| **Reservation System** | 30 tables, 30-min slots, Mon-Sat 5PM-11PM, Sun 5PM-9PM |
-| **Newsletter** | Email signup with validation |
-| **Gallery** | Lightbox with keyboard navigation |
-| **Responsive** | Desktop, tablet, mobile support |
+| **Reservation System** | 30 tables, 30-min time slots, Mon-Sat 5PM-11PM, Sun 5PM-9PM |
+| **Newsletter Signup** | Email validation, stored in PostgreSQL database |
+| **Gallery** | Lightbox with hover effects, keyboard navigation (arrows, Escape) |
+| **Responsive Design** | Desktop, tablet, and mobile support |
+| **Random Table Assignment** | Backend assigns available table (1-30) automatically |
+
+---
+
+## Design & Implementation Decisions
+
+### UI/UX Design
+- **CSS Approach**: Custom CSS with CSS variables for theming
+- **Layout**: Flexbox for navigation and alignment, Grid for gallery and menu
+- **Visual Style**: Elegant, luxury restaurant aesthetic with smooth transitions
+
+### Backend Architecture
+- **RESTful API**: Four endpoints for health check, newsletter, and reservations
+- **Database Schema**: Two tables (customers, reservations) with proper foreign key relationships
+- **Business Logic**:
+  - Validates 30-minute time slot intervals
+  - Enforces business hours (Mon-Sat 5PM-11PM, Sun 5PM-9PM)
+  - Rejects bookings when all 30 tables are occupied
+
+### Reservation Flow
+1. User selects date and time via DateTimePicker modal
+2. Frontend validates input format
+3. Backend checks availability for selected time slot
+4. If available, system assigns random table (1-30)
+5. Customer record created/updated, reservation stored
+6. Confirmation returned to user
 
 ---
 
@@ -187,16 +206,22 @@ cafe/
 |--------|----------|-------------|
 | GET | `/api/health` | Health check |
 | POST | `/api/newsletter` | Subscribe to newsletter |
-| GET | `/api/reservations/availability?time_slot=YYYY-MM-DDTHH:MM` | Check availability |
-| POST | `/api/reservations` | Create reservation |
+| GET | `/api/reservations/availability?time_slot=YYYY-MM-DDTHH:MM` | Check table availability |
+| POST | `/api/reservations` | Create new reservation |
 
-**Example - Create Reservation:**
+### Example - Check Availability
+```bash
+curl "http://localhost:5000/api/reservations/availability?time_slot=2026-06-15T17:00"
+```
+
+### Example - Create Reservation
 ```bash
 curl -X POST http://localhost:5000/api/reservations \
   -H "Content-Type: application/json" \
   -d '{
     "customer_name": "John Doe",
     "email": "john@example.com",
+    "phone": "202-555-1234",
     "time_slot": "2026-06-15T17:00",
     "num_guests": 2
   }'
@@ -204,40 +229,50 @@ curl -X POST http://localhost:5000/api/reservations \
 
 ---
 
-## Menu
+## Database Schema
 
-| Category | Items | Prices |
-|----------|-------|--------|
-| Starters | Bruschetta, Caesar Salad | $8.50 - $9.00 |
-| Main Courses | Grilled Salmon, Ribeye Steak, Vegetable Risotto | $18.00 - $28.00 |
-| Desserts | Tiramisu, Cheesecake | $7.00 - $7.50 |
-| Beverages | Red Wine, White Wine, Craft Beer, Espresso | $3.00 - $10.00 |
+### Customers Table
+| Column | Type | Constraints |
+|--------|------|-------------|
+| customer_id | SERIAL | PRIMARY KEY |
+| customer_name | VARCHAR(255) | NOT NULL |
+| email_address | VARCHAR(255) | NOT NULL, UNIQUE |
+| phone_number | VARCHAR(50) | NULLABLE |
+| newsletter_signup | BOOLEAN | DEFAULT FALSE |
+| created_at | TIMESTAMP | DEFAULT NOW() |
+
+### Reservations Table
+| Column | Type | Constraints |
+|--------|------|-------------|
+| reservation_id | SERIAL | PRIMARY KEY |
+| customer_id | INTEGER | FK → customers |
+| time_slot | TIMESTAMP | NOT NULL |
+| table_number | INTEGER | CHECK (1-30) |
+| num_guests | INTEGER | CHECK (>0) |
+| created_at | TIMESTAMP | DEFAULT NOW() |
 
 ---
 
-## Database
+## Restaurant Information
 
-Two tables: `customers` and `reservations`
-
-**Verify data:**
-```sql
-SELECT * FROM customers;
-SELECT * FROM reservations;
-```
-
----
-
-## Restaurant Info
-
+- **Name**: Café Fausse
 - **Address**: 1234 Culinary Ave, Suite 100, Washington, DC 20002
 - **Phone**: (202) 555-4567
-- **Hours**: Mon-Sat 5PM-11PM, Sun 5PM-9PM
+- **Hours**:
+  - Monday - Saturday: 5:00 PM - 11:00 PM
+  - Sunday: 5:00 PM - 9:00 PM
 
 ---
 
 ## Documentation
 
-- [SPEC.md](SPEC.md) - Detailed requirements specification
+- [SPEC.md](SPEC.md) - Detailed software requirements specification
 - [ai-tooling.md](ai-tooling.md) - AI tools used in development
+- [staging.md](staging.md) - Staging deployment information
 
 ---
+
+## Acknowledgments
+
+- Restaurant images from MSEE_Web_Application_and_Interface_Design_Cafe_Fausse_Images folder
+- Developed with assistance from AI-powered development tools
