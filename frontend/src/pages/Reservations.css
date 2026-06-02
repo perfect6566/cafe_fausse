@@ -1,0 +1,50 @@
+.reservations-page {
+  background: var(--color-bg);
+}
+
+.reservation-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+.reservation-info,
+.reservation-form {
+  padding: 2.5rem;
+}
+
+.reservation-info p {
+  color: var(--color-text-muted);
+  line-height: 1.85;
+  margin: 0 0 1rem;
+}
+
+.reservation-form {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.availability {
+  margin: 0;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+}
+
+.availability.available {
+  color: #8fd39a;
+}
+
+.availability.full {
+  color: #e59a9a;
+}
+
+.form-group--full {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 900px) {
+  .reservation-layout {
+    grid-template-columns: 1fr;
+  }
+}
