@@ -2,7 +2,6 @@
 
 > **Report Date**: June 2026
 > **Project**: Café Fausse Web Application
-> **Course**: MS AI Engineering, George Washington University
 > **AI Tools Used**: Cursor IDE
 
 ---
